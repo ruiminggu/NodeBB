@@ -19,8 +19,10 @@ categoriesAPI.get = function (caller, data) {
     return __awaiter(this, void 0, void 0, function* () {
         const [userPrivileges, category] = yield Promise.all([
             // The next line calls a function in a module that has not been updated to TS yet
-            // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             privileges.categories.get(data.cid, caller.uid),
+            // The next line calls a function in a module that has not been updated to TS yet
+            // eslint-disable-next-line @typescript-eslint/no-unsafe-call
             categories.getCategoryData(data.cid),
         ]);
         // The next line calls a function in a module that has not been updated to TS yet
@@ -34,7 +36,7 @@ categoriesAPI.get = function (caller, data) {
 categoriesAPI.create = function (caller, data) {
     return __awaiter(this, void 0, void 0, function* () {
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const response = yield categories.create(data);
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -48,17 +50,17 @@ categoriesAPI.update = function (caller, data) {
             throw new Error('[[error:invalid-data]]');
         }
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         yield categories.update(data);
     });
 };
 categoriesAPI.delete = function (caller, data) {
     return __awaiter(this, void 0, void 0, function* () {
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const name = yield categories.getCategoryField(data.cid, 'name');
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         yield categories.purge(data.cid, caller.uid);
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -112,7 +114,7 @@ categoriesAPI.setPrivilege = (caller, data) => __awaiter(void 0, void 0, void 0,
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const adminPrivList = yield privileges.admin.getPrivilegeList();
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const adminPrivs = privs.filter(priv => adminPrivList.includes(priv));
         if (adminPrivs.length) {
             // The next line calls a function in a module that has not been updated to TS yet

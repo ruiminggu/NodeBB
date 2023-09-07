@@ -33,8 +33,10 @@ type Response = {cid: number}
 categoriesAPI.get = async function (caller : Caller, data : Data1): Promise<GetReturnType> {
     const [userPrivileges, category] = await Promise.all([
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         privileges.categories.get(data.cid, caller.uid),
+        // The next line calls a function in a module that has not been updated to TS yet
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         categories.getCategoryData(data.cid),
     ]) as [UserPrivileges, GetReturnType];
     // The next line calls a function in a module that has not been updated to TS yet
@@ -48,7 +50,7 @@ categoriesAPI.get = async function (caller : Caller, data : Data1): Promise<GetR
 
 categoriesAPI.create = async function (caller : Caller, data: Data2) : Promise<GetReturnType> {
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const response = await categories.create(data) as Response;
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -61,16 +63,16 @@ categoriesAPI.update = async function (caller: Caller, data: Data1): Promise<voi
         throw new Error('[[error:invalid-data]]');
     }
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await categories.update(data);
 };
 
 categoriesAPI.delete = async function (caller: Caller, data : Data1): Promise<void> {
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     const name = await categories.getCategoryField(data.cid, 'name') as string;
     // The next line calls a function in a module that has not been updated to TS yet
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     await categories.purge(data.cid, caller.uid);
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
@@ -111,7 +113,7 @@ categoriesAPI.setPrivilege = async (caller: Caller, data: PrivilegeData): Promis
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         groups.exists(data.member),
-    ]);
+    ]) as [string, string];
 
     if (!userExists && !groupExists) {
         throw new Error('[[error:no-user-or-group]]');
@@ -124,9 +126,9 @@ categoriesAPI.setPrivilege = async (caller: Caller, data: PrivilegeData): Promis
     if (parseInt(data.cid, 10) === 0) {
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const adminPrivList = await privileges.admin.getPrivilegeList();
+        const adminPrivList = await privileges.admin.getPrivilegeList() as string;
         // The next line calls a function in a module that has not been updated to TS yet
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-call
         const adminPrivs = privs.filter(priv => adminPrivList.includes(priv));
         if (adminPrivs.length) {
             // The next line calls a function in a module that has not been updated to TS yet
@@ -135,7 +137,7 @@ categoriesAPI.setPrivilege = async (caller: Caller, data: PrivilegeData): Promis
         }
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const globalPrivList = await privileges.global.getPrivilegeList();
+        const globalPrivList = await privileges.global.getPrivilegeList() as string;
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const globalPrivs = privs.filter(priv => globalPrivList.includes(priv));
@@ -147,7 +149,7 @@ categoriesAPI.setPrivilege = async (caller: Caller, data: PrivilegeData): Promis
     } else {
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const categoryPrivList = await privileges.categories.getPrivilegeList();
+        const categoryPrivList = await privileges.categories.getPrivilegeList() as string;
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const categoryPrivs = privs.filter(priv => categoryPrivList.includes(priv));
