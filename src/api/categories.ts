@@ -25,13 +25,18 @@ type PrivilegeData = { member: string; privilege: string | string[]; set: boolea
 
 type GetReturnType = { cid: number }
 
+type UserPrivileges = {read: string}
+
+type Response = {cid: number}
+
+
 categoriesAPI.get = async function (caller : Caller, data : Data1): Promise<GetReturnType> {
     const [userPrivileges, category] = await Promise.all([
         // The next line calls a function in a module that has not been updated to TS yet
         // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         privileges.categories.get(data.cid, caller.uid),
         categories.getCategoryData(data.cid),
-    ]);
+    ]) as [UserPrivileges, GetReturnType];
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     if (!category || !userPrivileges.read) {
@@ -44,10 +49,10 @@ categoriesAPI.get = async function (caller : Caller, data : Data1): Promise<GetR
 categoriesAPI.create = async function (caller : Caller, data: Data2) : Promise<GetReturnType> {
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const response = await categories.create(data);
+    const response = await categories.create(data) as Response;
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const categoryObjs = await categories.getCategories([response.cid], caller.uid);
+    const categoryObjs = await categories.getCategories([response.cid], caller.uid) as GetReturnType;
     return categoryObjs[0];
 };
 
@@ -63,7 +68,7 @@ categoriesAPI.update = async function (caller: Caller, data: Data1): Promise<voi
 categoriesAPI.delete = async function (caller: Caller, data : Data1): Promise<void> {
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-    const name = await categories.getCategoryField(data.cid, 'name');
+    const name = await categories.getCategoryField(data.cid, 'name') as string;
     // The next line calls a function in a module that has not been updated to TS yet
     // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     await categories.purge(data.cid, caller.uid);
