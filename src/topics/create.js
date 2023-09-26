@@ -58,7 +58,7 @@ module.exports = function (Topics) {
         await Promise.all([
             db.sortedSetsAdd(timestampedSortedSetKeys, timestamp, topicData.tid),
             db.sortedSetsAdd([
-                'topics:views', 'topics:posts', 'topics:votes','topics:resolved', 
+                'topics:views', 'topics:posts', 'topics:votes', 'topics:resolved',
                 `cid:${topicData.cid}:tids:votes`,
                 `cid:${topicData.cid}:tids:posts`,
                 `cid:${topicData.cid}:tids:views`,
