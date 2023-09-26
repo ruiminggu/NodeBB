@@ -33,6 +33,7 @@ module.exports = function (Topics) {
             lastposttime: 0,
             postcount: 0,
             viewcount: 0,
+            resolved: false, // Define a new field
         };
 
         if (Array.isArray(data.tags) && data.tags.length) {
@@ -57,10 +58,11 @@ module.exports = function (Topics) {
         await Promise.all([
             db.sortedSetsAdd(timestampedSortedSetKeys, timestamp, topicData.tid),
             db.sortedSetsAdd([
-                'topics:views', 'topics:posts', 'topics:votes',
+                'topics:views', 'topics:posts', 'topics:votes','topics:resolved',
                 `cid:${topicData.cid}:tids:votes`,
                 `cid:${topicData.cid}:tids:posts`,
                 `cid:${topicData.cid}:tids:views`,
+                `cid:${topicData.cid}:tids:resolved`,
             ], 0, topicData.tid),
             user.addTopicIdToUser(topicData.uid, topicData.tid, timestamp),
             db.incrObjectField(`category:${topicData.cid}`, 'topic_count'),
@@ -233,6 +235,7 @@ module.exports = function (Topics) {
         posts.overrideGuestHandle(postData, data.handle);
 
         postData.votes = 0;
+        postData.resolves = false; // default to false
         postData.bookmarked = false;
         postData.display_edit_tools = true;
         postData.display_delete_tools = true;
